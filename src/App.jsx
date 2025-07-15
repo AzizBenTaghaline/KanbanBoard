@@ -6,8 +6,8 @@ import KanbanTest from './kanbanTest'
 
 function App() {
   return (
-    <KanbanTest/>
-    //<KanbanBoard/>
+    //<KanbanTest/>
+    <KanbanBoard/>
   )
 }
 

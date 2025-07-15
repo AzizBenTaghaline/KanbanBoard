@@ -1,260 +1,352 @@
-@import 'bootstrap/dist/css/bootstrap.min.css';
-/* Wrapper and Header */
-.kanban-wrapper {
-  min-height: 100vh;
-  background-color: #f9fafb;
-}
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css');
+            
+            .kanban-wrapper {
+              min-height: 100vh;
+              background-color: #f9fafb;
+            }
 
-.kanban-header {
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1rem 2rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
+            .kanban-header {
+              background-color: white;
+              border-bottom: 1px solid #e5e7eb;
+              padding: 1rem 2rem;
+              box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            }
 
-.kanban-header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+            .kanban-header-container {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
 
-.kanban-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1f2937;
-}
+            .kanban-title {
+              font-size: 1.5rem;
+              font-weight: 600;
+              color: #1f2937;
+            }
 
-.kanban-buttons {
-  display: flex;
-  gap: 1rem;
-}
+            .kanban-buttons {
+              display: flex;
+              gap: 1rem;
+            }
 
-.settings-btn {
-  padding: 0.5rem 1rem;
-  background-color: #e5e7eb;
-  color: #374151;
-  border-radius: 0.5rem;
-  transition: background-color 0.3s;
-}
+            .settings-btn {
+              padding: 0.5rem 1rem;
+              background-color: #e5e7eb;
+              color: #374151;
+              border-radius: 0.5rem;
+              border: none;
+              cursor: pointer;
+              transition: background-color 0.3s;
+            }
 
-.settings-btn:hover {
-  background-color: #d1d5db;
-}
+            .settings-btn:hover {
+              background-color: #d1d5db;
+            }
 
-.add-btn {
-  padding: 0.5rem 1rem;
-  background-color: #2563eb;
-  color: white;
-  border-radius: 0.5rem;
-  transition: background-color 0.3s;
-}
+            .kanban-main {
+              padding: 2rem;
+            }
 
-.add-btn:hover {
-  background-color: #1d4ed8;
-}
+            .kanban-columns {
+              display: flex;
+              gap: 1.5rem;
+              overflow-x: auto;
+            }
 
-/* Main Layout */
-.kanban-main {
-  padding: 2rem;
-}
+            .kanban-column {
+              background-color: white;
+              border-radius: 0.75rem;
+              box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+              min-width: 20rem;
+              max-width: 20rem;
+              display: flex;
+              flex-direction: column;
+            }
 
-.kanban-columns {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-}
+            .column-header {
+              padding: 1rem 1.25rem;
+              border-bottom: 1px solid #e5e7eb;
+            }
 
-/* Column */
-.kanban-column {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  min-width: 20rem;
-  max-width: 20rem;
-  display: flex;
-  flex-direction: column;
-}
+            .column-header-content {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
 
-.column-header {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid #e5e7eb;
-}
+            .column-title {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              font-weight: 600;
+              color: #1f2937;
+            }
 
-.column-header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+            .task-count {
+              background-color: #f3f4f6;
+              color: #4b5563;
+              padding: 0.25rem 0.5rem;
+              border-radius: 9999px;
+              font-size: 0.875rem;
+            }
 
-.column-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: #1f2937;
-}
+            .column-menu {
+              color: #9ca3af;
+              padding: 0.25rem;
+              background: none;
+              border: none;
+              cursor: pointer;
+            }
 
-.task-count {
-  background-color: #f3f4f6;
-  color: #4b5563;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-}
+            .column-menu:hover {
+              color: #4b5563;
+            }
 
-.column-menu {
-  color: #9ca3af;
-  padding: 0.25rem;
-  background: none;
-  border: none;
-}
+            .column-content {
+              flex-grow: 1;
+              padding: 1rem;
+              min-height: 12rem;
+              border-left-width: 4px;
+            }
 
-.column-menu:hover {
-  color: #4b5563;
-}
+            .border-blue {
+              border-left-color: #3b82f6;
+            }
 
-/* Column body */
-.column-body {
-  padding: 1rem;
-  min-height: 12rem;
-  border-left-width: 4px;
-}
+            .border-yellow {
+              border-left-color: #facc15;
+            }
 
-/* Colored borders */
-.border-blue {
-  border-left-color: #3b82f6;
-}
+            .border-purple {
+              border-left-color: #8b5cf6;
+            }
 
-.border-yellow {
-  border-left-color: #facc15;
-}
+            .border-green {
+              border-left-color: #10b981;
+            }
 
-.border-purple {
-  border-left-color: #8b5cf6;
-}
+            .no-tasks {
+              color: #6b7280;
+              text-align: center;
+              padding: 2rem 0;
+            }
 
-.border-green {
-  border-left-color: #10b981;
-}
+            .add-task-btn {
+              margin: 1rem;
+              padding: 0.75rem;
+              border: 2px dashed #d1d5db;
+              border-radius: 0.5rem;
+              color: #6b7280;
+              background: none;
+              cursor: pointer;
+              transition: all 0.3s;
+            }
 
-/* Empty State */
-.empty-text {
-  color: #6b7280;
-  text-align: center;
-  padding: 2rem 0;
-}
+            .add-task-btn:hover {
+              border-color: #3b82f6;
+              color: #3b82f6;
+            }
 
-  /* Add Task Button 
-  .add-task-btn {
-    margin: 1rem;
-    padding: 0.75rem;
-    border: 2px dashed #d1d5db;
-    border-radius: 0.5rem;
-    color: #6b7280;
-    background: none;
-    transition: all 0.3s;
-  }
+            .task-card {
+              background-color: white;
+              border: 1px solid #ddd;
+              padding: 12px;
+              border-radius: 8px;
+              margin-bottom: 12px;
+              cursor: move;
+              transition: box-shadow 0.2s;
+            }
 
-  .add-task-btn:hover {
-    border-color: #3b82f6;
-    color: #3b82f6;
-  }
-*/
-.column-content {
-  flex-grow: 1;
-  min-height: 100px;
-}
+            .task-card:hover {
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
 
-.no-tasks {
-  color: #888;
-  text-align: center;
-  padding: 40px 0;
-}
+            .task-title {
+              font-weight: 600;
+              color: #222;
+              margin-bottom: 6px;
+            }
 
-.task-card {
-  background-color: white;
-  border: 1px solid #ddd;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  transition: box-shadow 0.2s;
-}
+            .task-desc {
+              font-size: 14px;
+              color: #555;
+              margin-bottom: 12px;
+            }
 
-.task-card:hover {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+            .task-footer {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
 
-.task-title {
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 6px;
-}
+            .assignee {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            }
 
-.task-desc {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 12px;
-}
+            .avatar {
+              width: 24px;
+              height: 24px;
+              background: linear-gradient(to right, #4a90e2, #8e44ad);
+              color: white;
+              font-size: 12px;
+              font-weight: bold;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
 
-.task-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+            .priority-tag {
+              font-size: 12px;
+              padding: 4px 8px;
+              border-radius: 12px;
+              font-weight: bold;
+            }
 
-.assignee {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+            .priority-high {
+              background-color: #f8d7da;
+              color: #a71d2a;
+            }
 
-.avatar {
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(to right, #4a90e2, #8e44ad);
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+            .priority-medium {
+              background-color: #fff3cd;
+              color: #856404;
+            }
 
-.priority-tag {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-weight: bold;
-}
+            .priority-low {
+              background-color: #d4edda;
+              color: #155724;
+            }
 
-.priority-high {
-  background-color: #f8d7da;
-  color: #a71d2a;
-}
+            .task-meta {
+              display: flex;
+              align-items: center;
+              gap: 8px; 
+              color: #6b7280; 
+            }
 
-.priority-medium {
-  background-color: #fff3cd;
-  color: #856404;
-}
+            .meta-item {
+              display: flex;
+              align-items: center;
+              gap: 4px; 
+            }
 
-.priority-low {
-  background-color: #d4edda;
-  color: #155724;
-}
+            .meta-text {
+              font-size: 12px;
+            }
 
-.column-add-task {
-  margin-top: 16px;
-  padding: 10px;
-  border: 2px dashed #ccc;
-  background-color: transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #666;
-  transition: all 0.3s;
-}
+            .modal-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: rgba(0, 0, 0, 0.5);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 1000;
+            }
+/*
+            .modal {
+              background-color: white;
+              border-radius: 0.5rem;
+              padding: 1.5rem;
+              width: 100%;
+              max-width: 448px;
+              margin: 1rem;
+            }
 
-.column-add-task:hover {
-  border-color: #007bff;
-  color: #007bff;
-}
+            .modal-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1rem;
+            }
+
+            .modal-title {
+              font-size: 1.125rem;
+              font-weight: 600;
+            }
+
+            .modal-close {
+              background: none;
+              border: none;
+              color: #9ca3af;
+              cursor: pointer;
+              padding: 0.25rem;
+            }
+
+            .modal-close:hover {
+              color: #4b5563;
+            }
+
+            .form-group {
+              margin-bottom: 1rem;
+            }
+
+            .form-label {
+              display: block;
+              font-size: 0.875rem;
+              font-weight: 500;
+              color: #374151;
+              margin-bottom: 0.5rem;
+            }
+
+            .form-input, .form-textarea, .form-select {
+              width: 100%;
+              padding: 0.5rem 0.75rem;
+              border: 1px solid #d1d5db;
+              border-radius: 0.5rem;
+              font-size: 0.875rem;
+              box-sizing: border-box;
+            }
+
+            .form-input:focus, .form-textarea:focus, .form-select:focus {
+              outline: none;
+              border-color: #3b82f6;
+              box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+            .form-textarea {
+              resize: vertical;
+              min-height: 72px;
+            }
+
+            .modal-actions {
+              display: flex;
+              justify-content: flex-end;
+              gap: 0.75rem;
+              margin-top: 1.5rem;
+            }
+
+            .btn {
+              padding: 0.5rem 1rem;
+              border-radius: 0.5rem;
+              border: none;
+              cursor: pointer;
+              font-size: 0.875rem;
+              font-weight: 500;
+              transition: all 0.3s;
+            }
+
+            .btn-cancel {
+              background-color: white;
+              color: #4b5563;
+              border: 1px solid #d1d5db;
+            }
+
+            .btn-cancel:hover {
+              background-color: #f9fafb;
+            }
+
+            .btn-primary {
+              background-color: #2563eb;
+              color: white;
+            }
+
+            .btn-primary:hover {
+              background-color: #1d4ed8;
+            }*/
