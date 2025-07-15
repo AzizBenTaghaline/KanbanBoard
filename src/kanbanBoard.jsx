@@ -1,6 +1,5 @@
 import React from "react";
 import { MessageSquare, Paperclip, X } from 'lucide-react';
-import AddTaskModal from "./addTaskButton";
 class KanbanTest extends React.Component{
 constructor(props) {
     super(props);
@@ -113,10 +112,29 @@ handleDrop = (e, columnId) => {
 };
 
 // Add Task 
-  handleAddTask = () => {
-    console.log('Adding task:', this.state.newTask);
-    this.setState({ showAddTask: false });
-  }
+ handleAddTask = () => {
+  const { tasks, newTask , activeColumn } = this.state;
+  const newId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
+  const newTaskWithDefaults = {
+    ...newTask,
+    id: newId,
+    comments: 0,
+    attachments: 0,
+    status:  activeColumn || 'todo'
+  };
+
+  this.setState({
+    tasks: [...tasks, newTaskWithDefaults],
+    showAddTask: false,
+    activeColumn: null,
+    newTask: {
+      title: '',
+      description: '',
+      assignee: '',
+      priority: 'medium'
+    }
+  });
+};
 
   handleInputChange = (field, value) => {
     this.setState({
@@ -127,12 +145,18 @@ handleDrop = (e, columnId) => {
     });
   }
 
-  openModal = () => {
-    this.setState({ showAddTask: true });
+  openModal = (columnId) => {
+    this.setState({ 
+      showAddTask: true ,
+      activeColumn: columnId
+    });
   }
 
   closeModal = () => {
-    this.setState({ showAddTask: false });
+    this.setState({ 
+      showAddTask: false,
+      activeColumn: null
+     });
   }
 //BasicStracture
 
@@ -222,14 +246,16 @@ render(){
                   </div>
                   <div>
                           <button 
-                            onClick={this.openModal}
+                            onClick={()=>this.openModal(column.id)}
                             className="add-task-btn"
                           >
                             + Add Task
                           </button>
-                  
-                          {/* Add Task Modal */}
-                          {showAddTask && (
+                        </div>
+                </div>
+              ))}
+            </div>
+            {showAddTask && (
                             <div style={{
                               position: 'fixed',
                               top: 0,
@@ -440,13 +466,8 @@ render(){
                               </div>
                             </div>
                           )}
-                        </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
-        <AddTaskModal/>
       </div>
     ); 
   }
