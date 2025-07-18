@@ -1,9 +1,10 @@
 import React from "react";
-import { MessageSquare, Paperclip, X } from 'lucide-react';
+import { MessageSquare, Paperclip, X ,Plus} from 'lucide-react';
 class KanbanTest extends React.Component{
 constructor(props) {
     super(props);
     this.state = {
+      newColumnName: '',
       tasks: [
         {
           id: 1,
@@ -66,7 +67,12 @@ constructor(props) {
               assignee: '',
               priority: 'medium'
    }
+
     };
+    this.handleAddColumn = this.handleAddColumn.bind(this);
+    this.handleEditColumn = this.handleEditColumn.bind(this);
+    this.handleDeleteColumn = this.handleDeleteColumn.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   getInitials(name) {
@@ -136,7 +142,7 @@ handleDrop = (e, columnId) => {
   });
 };
 
-  handleInputChange = (field, value) => {
+  handleInputChangeTask = (field, value) => {
     this.setState({
         newTask: {
         ...this.state.newTask,
@@ -158,10 +164,116 @@ handleDrop = (e, columnId) => {
       activeColumn: null
      });
   }
+
+// Add Column 
+
+  handleAddColumn() {
+    if (this.state.newColumnName.trim()) {
+      const newColumn = {
+        id: `column-${Date.now()}`,
+        title: this.state.newColumnName.trim(),
+        className: 'border-gray' // Default class
+      };
+      
+      // Update the predefined columns array
+      const updatedColumns = [
+        ...this.state.columns,
+        newColumn
+      ];
+      
+      this.setState({
+        columns: updatedColumns,
+        newColumnName: '',
+        showAddColumnModal: false
+      });
+    }
+  }
+
+  handleEditColumn() {
+    if (this.state.newColumnName.trim() && this.state.activeColumn) {
+      const updatedColumns = this.state.columns.map(col => 
+        col.id === this.state.activeColumn.id 
+          ? { ...col, title: this.state.newColumnName.trim() }
+          : col
+      );
+      
+      this.setState({
+        columns: updatedColumns,
+        showEditColumnModal: false,
+        activeColumn: null,
+        newColumnName: '',
+      });
+    }
+  }
+
+   handleDeleteColumn() {
+    if (this.state.activeColumn) {
+      const updatedColumns = this.state.columns.filter(
+        col => col.id !== this.state.activeColumn.id
+      );
+      
+      // Also remove tasks associated with this column
+      const updatedTasks = this.state.tasks.filter(
+        task => task.status !== this.state.activeColumn.id
+      );
+      
+      this.setState({
+        columns: updatedColumns,
+        tasks: updatedTasks,
+        showDeleteModal: false,
+        activeColumn: null
+      });
+    }
+  }
+
+  openEditModal(column) {
+    this.setState({
+      activeColumn: column,
+      newColumnName: column.name,
+      showEditColumnModal: true,
+      activeDropdown: null
+    });
+  }
+
+  openDeleteModal(column) {
+    this.setState({
+      activeColumn: column,
+      showDeleteModal: true,
+      activeDropdown: null
+    });
+  }
+
+  toggleDropdown(columnId) {
+    this.setState({
+      activeDropdown: this.state.activeDropdown === columnId ? null : columnId
+    });
+  }
+
+  handleInputChange(e) {
+    this.setState({
+      newColumnName: e.target.value
+    });
+  }
+
+
 //BasicStracture
 
 render(){
-    const { tasks, showAddTask, newTask } = this.state;
+  const updatedColumns = [
+        ...this.state.columns,
+        newColumn
+      ];
+  const { 
+      showAddColumnModal, 
+      showEditColumnModal, 
+      showDeleteModal, 
+      activeColumn, 
+      newColumnName, 
+      activeDropdown,
+      tasks,
+      showAddTask,
+      newTask
+    } = this.state;
     const columns = [
     {
       id: 'todo',
@@ -184,6 +296,135 @@ render(){
       className: 'border-green'
     }
   ];
+  const styles={ modalOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000
+      },
+      modal: {
+        backgroundColor: 'white',
+        borderRadius: '0.5rem',
+        padding: '1.5rem',
+        width: '100%',
+        maxWidth: '28rem',
+        margin: '1rem'
+      },
+      modalHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '1rem'
+      },
+      modalTitle: {
+        fontSize: '1.125rem',
+        fontWeight: '600',
+        margin: 0
+      },
+      modalClose: {
+        background: 'none',
+        border: 'none',
+        color: '#9ca3af',
+        cursor: 'pointer',
+        padding: '0.25rem',
+        borderRadius: '0.25rem',
+        transition: 'color 0.3s'
+      },
+      formGroup: {
+        marginBottom: '1rem'
+      },
+      label: {
+        display: 'block',
+        fontSize: '0.875rem',
+        fontWeight: '500',
+        color: '#374151',
+        marginBottom: '0.5rem'
+      },
+      input: {
+        width: '100%',
+        padding: '0.5rem 0.75rem',
+        border: '1px solid #d1d5db',
+        borderRadius: '0.5rem',
+        fontSize: '0.875rem',
+        outline: 'none',
+        transition: 'border-color 0.3s, box-shadow 0.3s',
+        boxSizing: 'border-box'
+      },
+      select: {
+        width: '100%',
+        padding: '0.5rem 0.75rem',
+        border: '1px solid #d1d5db',
+        borderRadius: '0.5rem',
+        fontSize: '0.875rem',
+        outline: 'none',
+        backgroundColor: 'white',
+        transition: 'border-color 0.3s, box-shadow 0.3s',
+        boxSizing: 'border-box'
+      },
+      modalActions: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '0.75rem',
+        marginTop: '1.5rem'
+      },
+      cancelBtn: {
+        padding: '0.5rem 1rem',
+        color: '#4b5563',
+        border: '1px solid #d1d5db',
+        borderRadius: '0.5rem',
+        backgroundColor: 'white',
+        cursor: 'pointer',
+        fontSize: '0.875rem',
+        transition: 'background-color 0.3s'
+      },
+      primaryBtn: {
+        padding: '0.5rem 1rem',
+        backgroundColor: '#3b82f6',
+        color: 'white',
+        border: 'none',
+        borderRadius: '0.5rem',
+        cursor: 'pointer',
+        fontSize: '0.875rem',
+        transition: 'background-color 0.3s'
+      },
+      deleteBtn: {
+        padding: '0.5rem 1rem',
+        backgroundColor: '#dc2626',
+        color: 'white',
+        border: 'none',
+        borderRadius: '0.5rem',
+        cursor: 'pointer',
+        fontSize: '0.875rem',
+        transition: 'background-color 0.3s'
+      },
+      clickOutside: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 5
+      },
+      addColumnBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        padding: '0.5rem 1rem',
+        backgroundColor: '#3b82f6',
+        color: 'white',
+        border: 'none',
+        borderRadius: '0.5rem',
+        cursor: 'pointer',
+        fontSize: '14px',
+        transition: 'background-color 0.3s'
+      },
+    };
     return( 
       <div> 
         <div className="kanban-wrapper">
@@ -191,6 +432,15 @@ render(){
             <div className="kanban-header-container">
               <h1 className="kanban-title">Project Kanban Board</h1>
               <div className="kanban-buttons"> 
+                <button
+                style={styles.addColumnBtn}
+                onClick={() => this.setState({ showAddColumnModal: true })}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#2563eb'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+              >
+                <Plus size={16} />
+                Add Column
+              </button>
                 <button className="settings-btn">⚙️ Settings</button>
               </div>
             </div>
@@ -316,7 +566,7 @@ render(){
                                     <input
                                       type="text"
                                       value={newTask.title}
-                                      onChange={(e) => this.handleInputChange('title', e.target.value)}
+                                      onChange={(e) => this.handleInputChangeTask('title', e.target.value)}
                                       style={{
                                         width: '100%',
                                         padding: '8px 12px',
@@ -342,7 +592,7 @@ render(){
                                     }}>Description</label>
                                     <textarea
                                       value={newTask.description}
-                                      onChange={(e) => this.handleInputChange('description', e.target.value)}
+                                      onChange={(e) => this.handleInputChangeTask('description', e.target.value)}
                                       style={{
                                         width: '100%',
                                         padding: '8px 12px',
@@ -371,7 +621,7 @@ render(){
                                     <input
                                       type="text"
                                       value={newTask.assignee}
-                                      onChange={(e) => this.handleInputChange('assignee', e.target.value)}
+                                      onChange={(e) => this.handleInputChangeTask('assignee', e.target.value)}
                                       style={{
                                         width: '100%',
                                         padding: '8px 12px',
@@ -402,7 +652,7 @@ render(){
                                       }}>Priority</label>
                                       <select
                                         value={newTask.priority}
-                                        onChange={(e) => this.handleInputChange('priority', e.target.value)}
+                                        onChange={(e) => this.handleInputChangeTask('priority', e.target.value)}
                                         style={{
                                           width: '100%',
                                           padding: '8px 12px',
@@ -468,6 +718,219 @@ render(){
                           )}
           </div>
         </div>
+        {showAddColumnModal && (
+                  <div style={styles.modalOverlay}>
+                    <div style={styles.modal}>
+                      <div style={styles.modalHeader}>
+                        <h3 style={styles.modalTitle}>Add New Column</h3>
+                        <button
+                          style={styles.modalClose}
+                          onClick={() => this.setState({ showAddColumnModal: false })}
+                          onMouseOver={(e) => e.target.style.color = '#4b5563'}
+                          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+        
+                      <div style={styles.formGroup}>
+                        <label style={styles.label}>Column Name</label>
+                        <input
+                          type="text"
+                          style={styles.input}
+                          value={newColumnName}
+                          onChange={this.handleInputChange}
+                          placeholder="Enter column name"
+                          autoFocus
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#3b82f6';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#d1d5db';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+        
+                    {/*  <div style={styles.formGroup}>
+                        <label style={styles.label}>Color</label>
+                        <select
+                          style={styles.select}
+                     
+                          onFocus={(e) => {
+                            e.targ     value={newColumnColor}et.style.borderColor = '#3b82f6';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#d1d5db';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        >
+                          {this.colorOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>*/}
+        
+                      <div style={styles.modalActions}>
+                        <button
+                          style={styles.cancelBtn}
+                          onClick={() => this.setState({ showAddColumnModal: false })}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = 'white'}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          style={styles.primaryBtn}
+                          onClick={this.handleAddColumn}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#2563eb'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+                        >
+                          Add Column
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+        
+                {/* Edit Column Modal */}
+                {showEditColumnModal && (
+                  <div style={styles.modalOverlay}>
+                    <div style={styles.modal}>
+                      <div style={styles.modalHeader}>
+                        <h3 style={styles.modalTitle}>Edit Column</h3>
+                        <button
+                          style={styles.modalClose}
+                          onClick={() => this.setState({ showEditColumnModal: false })}
+                          onMouseOver={(e) => e.target.style.color = '#4b5563'}
+                          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+        
+                      <div style={styles.formGroup}>
+                        <label style={styles.label}>Column Name</label>
+                        <input
+                          type="text"
+                          style={styles.input}
+                          value={newColumnName}
+                          onChange={this.handleInputChange}
+                          placeholder="Enter column name"
+                          autoFocus
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#3b82f6';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#d1d5db';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+        
+                      {/*<div style={styles.formGroup}>
+                        <label style={styles.label}>Color</label>
+                        <select
+                          style={styles.select}
+                          value={newColumnColor}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#3b82f6';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#d1d5db';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        >
+                          {this.colorOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>*/}
+        
+                      <div style={styles.modalActions}>
+                        <button
+                          style={styles.cancelBtn}
+                          onClick={() => this.setState({ showEditColumnModal: false })}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = 'white'}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          style={styles.primaryBtn}
+                          onClick={this.handleEditColumn}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#2563eb'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+                        >
+                          Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+        
+                {/* Delete Column Modal */}
+                {showDeleteModal && (
+                  <div style={styles.modalOverlay}>
+                    <div style={styles.modal}>
+                      <div style={styles.modalHeader}>
+                        <h3 style={styles.modalTitle}>Delete Column</h3>
+                        <button
+                          style={styles.modalClose}
+                          onClick={() => this.setState({ showDeleteModal: false })}
+                          onMouseOver={(e) => e.target.style.color = '#4b5563'}
+                          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+        
+                      <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>
+                        Are you sure you want to delete the "{activeColumn?.name}" column? 
+                        {activeColumn?.tasks.length > 0 && (
+                          <span style={{ color: '#dc2626', fontWeight: '500' }}>
+                            {" "}This will also delete {activeColumn.tasks.length} task(s).
+                          </span>
+                        )}
+                      </p>
+        
+                      <div style={styles.modalActions}>
+                        <button
+                          style={styles.cancelBtn}
+                          onClick={() => this.setState({ showDeleteModal: false })}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = 'white'}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          style={styles.deleteBtn}
+                          onClick={this.handleDeleteColumn}
+                          onMouseOver={(e) => e.target.style.backgroundColor = '#b91c1c'}
+                          onMouseOut={(e) => e.target.style.backgroundColor = '#dc2626'}
+                        >
+                          Delete Column
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+        
+                {/* Click outside handler for dropdowns */}
+                {activeDropdown && (
+                  <div 
+                    style={styles.clickOutside}
+                    onClick={() => this.setState({ activeDropdown: null })}
+                  />
+                )}
       </div>
     ); 
   }
